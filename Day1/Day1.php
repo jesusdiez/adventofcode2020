@@ -7,7 +7,7 @@ namespace AoC\Day1;
 
 final class Day1
 {
-    public static function main(): void
+    public static function main1(): void
     {
         $numbers = \array_map(fn($n) => (int) trim($n), file(__DIR__ . '/input'));
         $complementaries = \array_map(fn($n) => (2020 - (int) $n), $numbers);
@@ -15,6 +15,23 @@ final class Day1
 
         echo current($couple) * end($couple);
     }
+
+    public static function main2(): void
+    {
+        $numbers = \array_map(fn($n) => (int) trim($n), file(__DIR__ . '/input'));
+        foreach ($numbers as $n) {
+            $pending = 2020 - $n;
+            foreach ($numbers as $n2) {
+                if ($n2 == $n) continue;
+                $pending2 = $pending-$n2;
+                if (!empty(array_search($pending2, $numbers))) {
+                    echo $n*$n2*$pending2;
+                    return;
+                }
+            }
+        }
+    }
 }
 
-Day1::main();
+Day1::main1();
+Day1::main2();
