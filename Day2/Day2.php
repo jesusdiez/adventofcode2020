@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AoC\Day1;
+namespace AoC20\Day2;
 
 final class Day2
 {

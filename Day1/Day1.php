@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AoC\Day1;
-
-// require_once(__DIR__ . '/../vendor/autoload.php');
+namespace AoC20\Day1;
 
 final class Day1
 {
