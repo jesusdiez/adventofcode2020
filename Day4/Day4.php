@@ -52,17 +52,68 @@ final class Day4 implements Day
 
     public static function validateField(string $k, string $v)
     {
-        echo "\n ➡️ Is $v a valid $k?";
+//        echo "\n ➡️ Is $v a valid $k?";
         if (!\key_exists($k, self::$rules)) {
             return true;
         }
-        if (!$match = preg_match(self::$rules[$k], $v)) {
-            echo "\n❌ Not valid!";
+        $function = 'validate'.\ucfirst($k);
+        if(!self::$function($v)) {
+//            echo "\n❌ Not valid!";
 
             return false;
         }
 
         return true;
+    }
+
+    private static function validateByr(string $value): bool
+    {
+        $value = (int) $value;
+
+        return $value >= 1920 && $value <= 2002;
+    }
+
+    private static function validateIyr(string $value): bool
+    {
+        $value = (int) $value;
+
+        return $value >= 2010 && $value <= 2020;
+    }
+
+    private static function validateEyr(string $value): bool
+    {
+        $value = (int) $value;
+
+        return $value >= 2020 && $value <= 2030;
+    }
+
+    private static function validateHgt(string $value): bool
+    {
+        $measure = \substr($value, -2, 2);
+        $size = (int) \substr($value, 0, strlen($value)-2);
+        if ($measure == 'in') {
+            return $size >= 59 && $size <= 76;
+        }
+        if ($measure == 'cm') {
+            return $size >= 150 && $size <= 193;
+        }
+
+        return false;
+    }
+
+    private static function validateHcl(string $value): bool
+    {
+        return (bool) \preg_match('/^#[0-9a-f]{6}$/', $value);
+    }
+
+    private static function validateEcl(string $value): bool
+    {
+        return in_array($value, ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']);
+    }
+
+    private static function validatePid(string $value): bool
+    {
+        return (bool) \preg_match('/^([0-9]{9})$/', $value);
     }
 
     private static function validatePassportPart1Func(): callable
@@ -73,7 +124,7 @@ final class Day4 implements Day
         return function ($passport) {
             $mandatoryMissing = array_diff(array_keys(self::$rules), array_keys($passport));
             if (!empty($mandatoryMissing)) {
-                echo "\n❌ mandatory missing: " . json_encode($mandatoryMissing);
+//                echo "\n❌ mandatory missing: " . json_encode($mandatoryMissing);
 
                 return false;
             }
@@ -85,7 +136,7 @@ final class Day4 implements Day
     private static function validatePassportPart2Func(): callable
     {
         return function ($passport) {
-            echo "\n\n" . json_encode($passport);
+//            echo "\n\n" . json_encode($passport);
             if (!self::validatePassportPart1Func()($passport)) {
                 return false;
             };
@@ -95,8 +146,7 @@ final class Day4 implements Day
                     return false;
                 }
             }
-
-            echo "\n✅ ";
+//            echo "\n✅ ";
 
             return true;
         };
@@ -114,9 +164,6 @@ final class Day4 implements Day
 
     public function part2(): int
     {
-        $valid = array_filter($this->passports, self::validatePassportPart2Func());
-//        echo "\n\n\n" . json_encode($valid, \JSON_PRETTY_PRINT);
-
-        return count($valid);
+        return count(array_filter($this->passports, self::validatePassportPart2Func()));
     }
 }
