@@ -3,38 +3,23 @@ declare(strict_types=1);
 
 namespace AoC20\Day2;
 
-final class Day2
+use AoC20\Tools\Day;
+
+final class Day2 implements Day
 {
-    public static function main1(): void
-    {
-        $valid = 0;
-        foreach (self::parseInput() as [$_, $min, $max, $letter, $password]) {
-            $letterMap = \array_count_values(\str_split($password));
-            if (key_exists($letter, $letterMap) && $letterMap[$letter] >= $min && $letterMap[$letter] <= $max) {
-                $valid++;
-            }
-        }
+    private array $lines;
 
-        echo "Part1 Valid: " . $valid . PHP_EOL;
+    public function __construct(string $inputContent)
+    {
+        $this->lines = self::parseInput($inputContent);
     }
 
-    public static function main2(): void
+    public static function parseInput(string $content): array
     {
-        $valid = 0;
-        foreach (self::parseInput() as [$_, $pos1, $pos2, $letter, $password]) {
-            if ((($password[$pos1 - 1] === $letter ? 1 : 0) + ($password[$pos2 - 1] === $letter ? 1 : 0 )) == 1) {
-                $valid++;
-            }
-        }
-
-        echo "Part2 Valid: " . $valid . PHP_EOL;
-    }
-
-    protected static function parseInput(): array
-    {
-        $lines = file(__DIR__ . '/input');
-
-        return array_map(fn($line) => self::match('/(\d+)-(\d+) ([a-z]): (\w+)/', $line), $lines);
+        return array_map(
+            fn($line) => self::match('/(\d+)-(\d+) ([a-z]): (\w+)/', $line),
+            array_filter(explode(PHP_EOL, $content))
+        );
     }
 
     private static function match(string $pattern, string $haystack): array
@@ -43,7 +28,29 @@ final class Day2
 
         return $matches;
     }
-}
 
-Day2::main1();
-Day2::main2();
+    public function part1(): int
+    {
+        $valid = 0;
+        foreach ($this->lines as [$_, $min, $max, $letter, $password]) {
+            $letterMap = \array_count_values(\str_split($password));
+            if (key_exists($letter, $letterMap) && $letterMap[$letter] >= $min && $letterMap[$letter] <= $max) {
+                $valid++;
+            }
+        }
+
+        return $valid;
+    }
+
+    public function part2(): int
+    {
+        $valid = 0;
+        foreach ($this->lines as [$_, $pos1, $pos2, $letter, $password]) {
+            if ((($password[$pos1 - 1] === $letter ? 1 : 0) + ($password[$pos2 - 1] === $letter ? 1 : 0)) == 1) {
+                $valid++;
+            }
+        }
+
+        return $valid;
+    }
+}

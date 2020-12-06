@@ -3,34 +3,16 @@ declare(strict_types=1);
 
 namespace AoC20\Day3;
 
-final class Day3
+use AoC20\Tools\Day;
+
+final class Day3 implements Day
 {
     private const TREE = '#';
+    private array $map;
 
-    public static function main1(): void
+    public function __construct(string $inputContent)
     {
-        $map = self::parseInput();
-        $treeCount = self::treeCount($map, 3,1);
-
-        printf("Part 1.\nTree count: %d\n", $treeCount);
-    }
-
-    public static function main2(): void
-    {
-        $map = self::parseInput();
-        $slopes = [
-            [1,1],
-            [3,1],
-            [5,1],
-            [7,1],
-            [1,2],
-        ];
-        $results = array_map(
-            fn($slope) => self::treeCount($map, $slope[0], $slope[1]),
-            $slopes
-        );
-
-        printf("Part 2.\nResults: %s.\nTotal Trees: %d\n", json_encode($results), array_product($results));
+        $this->map = self::parseInput($inputContent);
     }
 
     private static function treeCount(array $map, int $speedX, int $speedY): int
@@ -52,11 +34,30 @@ final class Day3
         return $treeCount;
     }
 
-    private static function parseInput(): array
+    public static function parseInput(string $content): array
     {
-        return array_map(fn($line) => str_split(trim($line)), file(__DIR__ . '/input'));
+        return array_map(fn($line) => str_split(trim($line)), array_filter(explode(PHP_EOL, $content)));
+    }
+
+    public function part1(): int
+    {
+        return self::treeCount($this->map, 3, 1);
+    }
+
+    public function part2(): int
+    {
+        $slopes = [
+            [1, 1],
+            [3, 1],
+            [5, 1],
+            [7, 1],
+            [1, 2],
+        ];
+        $results = array_map(
+            fn($slope) => self::treeCount($this->map, $slope[0], $slope[1]),
+            $slopes
+        );
+
+        return array_product($results);
     }
 }
-
-Day3::main1();
-Day3::main2();
