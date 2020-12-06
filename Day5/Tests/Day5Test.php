@@ -7,11 +7,11 @@ use PHPUnit\Framework\TestCase;
 class Day5Test extends TestCase
 {
     /** @dataProvider providerDecode */
-    public function testDecode($value, $sample)
+    public function testDecode($expected, $sample)
     {
         $sut = new Day5($sample);
 
-        self::assertEquals($value, [44, 5], $sut->decode());
+        self::assertEquals($expected, $sut->decode($sample));
     }
 
     public function providerDecode()
