@@ -24,7 +24,7 @@ final class Day6 implements Day
         );
     }
 
-    public static function mapGroupAnswers(array $groupAnswers): array
+    public static function mapGroupAnswersPart1(array $groupAnswers): array
     {
         $ar = array_reduce(
             $groupAnswers,
@@ -32,15 +32,40 @@ final class Day6 implements Day
             []
         );
 
-        echo "\nGroup Answers: ".json_encode($groupAnswers);
-        echo "\nMerged: ".json_encode($ar);
+//        echo "\nGroup Answers: ".json_encode($groupAnswers);
+//        echo "\nMerged: ".json_encode($ar);
         $ar = array_values(array_unique($ar));
         sort($ar);
-        echo "\nUnique sort: ".json_encode($ar);
-        echo "\nCount: ".count($ar);
-        echo "\n";
+//        echo "\nUnique sort: ".json_encode($ar);
+//        echo "\nCount: ".count($ar);
+//        echo "\n";
 
         return array_values($ar);
+    }
+
+    public static function mapGroupAnswersPart2(array $groupAnswers): array
+    {
+        $peopleCount = count($groupAnswers);
+        $countAnswers = array_reduce(
+            $groupAnswers,
+            function(array $carry, string $personAnswer) {
+                $count = array_count_values(str_split($personAnswer));
+                foreach($count as $k => $v) {
+                    $carry[$k] = ($carry[$k] ?? 0) + $v;
+                }
+                return $carry;
+            },
+            []
+        );
+        $commonAnswers = array_filter($countAnswers, fn($v) => $v == $peopleCount);
+
+//        echo "\nGroup Answers: ".json_encode($groupAnswers);
+//        echo "\nCount Answers: ".json_encode($countAnswers);
+//        echo "\nCommon Answers: ".json_encode($commonAnswers);
+//        echo "\nCount: ".count($commonAnswers);
+//        echo "\n";
+
+        return array_keys($commonAnswers);
     }
 
     public static function splitInputStrInArrayOfGroups(string $contents): array
@@ -51,15 +76,20 @@ final class Day6 implements Day
     public function part1(): int
     {
         $counts = array_map(
-                fn($groupAnswers) => count(self::mapGroupAnswers($groupAnswers)),
-                $this->groupAnswers
-            );
+            fn($groupAnswers) => count(self::mapGroupAnswersPart1($groupAnswers)),
+            $this->groupAnswers
+        );
 
         return array_sum($counts);
     }
 
     public function part2(): int
     {
-        return -1;
+        $counts = array_map(
+            fn($groupAnswers) => count(self::mapGroupAnswersPart2($groupAnswers)),
+            $this->groupAnswers
+        );
+
+        return array_sum($counts);
     }
 }
