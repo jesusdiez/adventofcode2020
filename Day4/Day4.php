@@ -12,14 +12,13 @@ final class Day4 implements Day
     ];
 
     private static array $rules = [
-        'byr' => ['mandatory' => true, 'pattern' => '/^19[2-9]\d|200[0-2]$/'],
-        'iyr' => ['mandatory' => true, 'pattern' => '/^201\d|2020$/'],
-        'eyr' => ['mandatory' => true, 'pattern' => '/^202\d|2030$/'],
-        'hgt' => ['mandatory' => true, 'pattern' => '/^((1[5-8][0-9]|19[0-3])cm)|((59|6[0-9]|7[0-6])in)$/'],
-        'hcl' => ['mandatory' => true, 'pattern' => '/^#[0-9a-f]{6}$/'],
-        'ecl' => ['mandatory' => true, 'pattern' => '/^(amb|blu|brn|gry|grn|hzl|oth)$/'],
-        'pid' => ['mandatory' => true, 'pattern' => '/^([0-9]{9})$/'],
-        'cid' => [],
+        'byr' => '/^19[2-9][0-9]|200[0-2]$/',
+        'iyr' => '/^201[0-9]|2020$/',
+        'eyr' => '/^202[0-9]|2030$/',
+        'hgt' => '/^((1[5-8][0-9]|19[0-3])cm)|((59|6[0-9]|7[0-6])in)$/',
+        'hcl' => '/^#[0-9a-f]{6}$/',
+        'ecl' => '/^(amb|blu|brn|gry|grn|hzl|oth)$/',
+        'pid' => '/^([0-9]{9})$/',
     ];
     private array $passports;
 
@@ -53,14 +52,12 @@ final class Day4 implements Day
 
     public static function validateField(string $k, string $v)
     {
-        echo "\n ➡️ Validate $k with $v ";
-        if (!key_exists('pattern', self::$rules[$k])) {
-            echo "(OK, no mandatory)";
-
+        echo "\n ➡️ Is $v a valid $k?";
+        if (!\key_exists($k, self::$rules)) {
             return true;
         }
-        if (!$match = preg_match(self::$rules[$k]['pattern'], $v)) {
-            echo "\n❌  Match failure!";
+        if (!$match = preg_match(self::$rules[$k], $v)) {
+            echo "\n❌ Not valid!";
 
             return false;
         }
@@ -74,19 +71,7 @@ final class Day4 implements Day
 //        echo "\n mandatory keys " . json_encode(self::mandatoryKeys(), \JSON_PRETTY_PRINT);
 
         return function ($passport) {
-//            echo "\n\n-----------------------------------";
-//            echo "\n passport " . json_encode($passport, \JSON_PRETTY_PRINT);
-//            $validMissing = array_diff(array_keys(self::$keys), array_keys($passport));
-            $validExtra = array_diff(array_keys($passport), array_keys(self::$rules));
-//            echo "\n valid missing: " . json_encode($validMissing);
-            if (!empty($validExtra)) {
-                echo "\n❌ valid extra: " . json_encode($validExtra);
-
-                return false;
-            }
-            $mandatoryMissing = array_diff(self::mandatoryKeys(), array_keys($passport));
-//            $mandatoryExtra = array_diff(array_keys($passport), self::mandatoryKeys());
-//            echo "\n mandatory extra: " . json_encode($mandatoryExtra);
+            $mandatoryMissing = array_diff(array_keys(self::$rules), array_keys($passport));
             if (!empty($mandatoryMissing)) {
                 echo "\n❌ mandatory missing: " . json_encode($mandatoryMissing);
 
@@ -100,10 +85,8 @@ final class Day4 implements Day
     private static function validatePassportPart2Func(): callable
     {
         return function ($passport) {
-            echo "\n" . json_encode($passport);
+            echo "\n\n" . json_encode($passport);
             if (!self::validatePassportPart1Func()($passport)) {
-                echo "\n❌ failed on first step. ";
-
                 return false;
             };
 
@@ -132,7 +115,7 @@ final class Day4 implements Day
     public function part2(): int
     {
         $valid = array_filter($this->passports, self::validatePassportPart2Func());
-        echo "\n\n\n" . json_encode($valid, \JSON_PRETTY_PRINT);
+//        echo "\n\n\n" . json_encode($valid, \JSON_PRETTY_PRINT);
 
         return count($valid);
     }
