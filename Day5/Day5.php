@@ -14,25 +14,48 @@ final class Day5 implements Day
         $this->boardingPasses = self::parseInput($inputContent);
     }
 
-    public function decode(string $pass): array
-    {
-        $rows = str_replace(['F','B'], [0, 1], substr($pass, 0, 7));
-        $cols = str_replace(['L','R'], [0, 1], substr($pass, 7, 3));
-
-        return [bindec($rows), bindec($cols)];
-    }
-
     public static function parseInput(string $contents): array
     {
         return explode(PHP_EOL, $contents);
     }
 
+    public function decode(string $pass): array
+    {
+        $rows = str_replace(['F', 'B'], [0, 1], substr($pass, 0, 7));
+        $cols = str_replace(['L', 'R'], [0, 1], substr($pass, 7, 3));
+
+        return [bindec($rows), bindec($cols)];
+    }
+
+    public function calculateSeatId(string $boardingPass): int
+    {
+        [$row, $col] = $this->decode($boardingPass);
+
+        return $row * 8 + $col;
+    }
+
+    public function calculateSeatIds(): array
+    {
+        return array_map(fn($bp) => $this->calculateSeatId($bp), $this->boardingPasses);
+    }
+
     public function part1(): int
     {
-        return max(array_map(fn($v) => $this->decode($v)[0] * 8 + $this->decode($v)[1], $this->boardingPasses));
+        return max($this->calculateSeatIds());
     }
 
     public function part2(): int
     {
+        $existingSeatIds = $this->calculateSeatIds();
+        $candidates = array_diff(range(1, max($existingSeatIds)), $existingSeatIds);
+
+        return current(
+            array_values(
+                array_filter(
+                    $candidates,
+                    fn($seat) => in_array($seat - 1, $existingSeatIds) && in_array($seat + 1, $existingSeatIds)
+                )
+            )
+        );
     }
 }
