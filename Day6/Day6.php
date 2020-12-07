@@ -12,8 +12,6 @@ final class Day6 implements Day
     public function __construct(string $inputContent)
     {
         $this->groupAnswers = self::parseInput($inputContent);
-//        echo json_encode($this->groupAnswers, \JSON_PRETTY_PRINT);
-//        die;
     }
 
     public static function parseInput(string $contents): array
@@ -32,13 +30,8 @@ final class Day6 implements Day
             []
         );
 
-//        echo "\nGroup Answers: ".json_encode($groupAnswers);
-//        echo "\nMerged: ".json_encode($ar);
         $ar = array_values(array_unique($ar));
         sort($ar);
-//        echo "\nUnique sort: ".json_encode($ar);
-//        echo "\nCount: ".count($ar);
-//        echo "\n";
 
         return array_values($ar);
     }
@@ -58,12 +51,6 @@ final class Day6 implements Day
             []
         );
         $commonAnswers = array_filter($countAnswers, fn($v) => $v == $peopleCount);
-
-//        echo "\nGroup Answers: ".json_encode($groupAnswers);
-//        echo "\nCount Answers: ".json_encode($countAnswers);
-//        echo "\nCommon Answers: ".json_encode($commonAnswers);
-//        echo "\nCount: ".count($commonAnswers);
-//        echo "\n";
 
         return array_keys($commonAnswers);
     }
