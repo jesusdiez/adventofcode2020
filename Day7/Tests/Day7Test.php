@@ -50,9 +50,15 @@ EOF;
         self::assertEquals($expected, Day7::parseInput($this->input));
     }
 
-    public function testCanContain(): void
+    public function testCanContainDirect(): void
+    {
+        $expected = ['bright white', 'muted yellow'];
+        self::assertEquals($expected, $this->sut->canContainDirect('shiny gold'));
+    }
+
+    public function testCanContainDeep(): void
     {
         $expected = ['bright white', 'muted yellow', 'light red', 'dark orange', ];
-        self::assertEquals($expected, $this->sut->canContain('shiny gold'));
+        self::assertEquals($expected, $this->sut->canContainDeep('shiny gold'));
     }
 }

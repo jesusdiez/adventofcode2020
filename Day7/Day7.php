@@ -50,9 +50,9 @@ final class Day7 implements Day
         );
     }
 
-    public function canContain(string $selColor): array
+    public function canContainDirect(string $selColor): array
     {
-        $canContain = array_reduce(
+        return array_reduce(
             array_keys($this->data),
             function (array $carry, $containerBagColor) use ($selColor) {
                 if (\key_exists($selColor, $this->data[$containerBagColor])) {
@@ -63,12 +63,17 @@ final class Day7 implements Day
             },
             []
         );
+    }
+
+    public function canContainDeep(string $selColor): array
+    {
+        $canContain = $this->canContainDirect($selColor);
 
         return array_unique(
             array_reduce(
                 $canContain,
                 function (array $carry, $containerBagColor) {
-                    return array_merge($carry, $this->canContain($containerBagColor));
+                    return array_merge($carry, $this->canContainDeep($containerBagColor));
                 },
                 $canContain
             )
@@ -77,7 +82,7 @@ final class Day7 implements Day
 
     public function part1(): int
     {
-        return count($this->canContain('shiny gold'));
+        return count($this->canContainDeep('shiny gold'));
     }
 
     public function part2(): int
