@@ -50,7 +50,7 @@ EOF;
 
     public function testPart1(): void
     {
-//        self::assertEquals(?, $this->sut->part1());
+        self::assertEquals(5, $this->sut->part1());
     }
 
     public function testPart2(): void

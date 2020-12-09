@@ -27,9 +27,32 @@ final class Day8 implements Day
         );
     }
 
+    public function accBeforeRepeat(array $program): int
+    {
+        $acc = 0;
+        $pointer = 0;
+        $executed = [];
+        while(!in_array($pointer, $executed)) {
+            [$cmd, $arg] = $program[$pointer];
+            $executed[] = $pointer;
+            switch($cmd) {
+                case 'jmp':
+                    $pointer += $arg;
+                    break;
+                case 'acc':
+                    $acc += $arg;
+                case 'nop':
+                default:
+                    $pointer++;
+            }
+        }
+
+        return $acc;
+    }
+
     public function part1(): int
     {
-        return -1;
+        return $this->accBeforeRepeat($this->data);
     }
 
     public function part2(): int
