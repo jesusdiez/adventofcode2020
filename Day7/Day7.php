@@ -80,6 +80,17 @@ final class Day7 implements Day
         );
     }
 
+    public function getInsideCount(string $selColor): int
+    {
+        return array_reduce(
+            array_keys($this->data[$selColor]),
+            function(int $carry, $contentBagColor) use ($selColor) {
+                return $carry + $this->data[$selColor][$contentBagColor] * $this->getInsideCount($contentBagColor);
+            },
+            1
+        );
+    }
+
     public function part1(): int
     {
         return count($this->canContainDeep('shiny gold'));
@@ -87,7 +98,7 @@ final class Day7 implements Day
 
     public function part2(): int
     {
-        return -1;
+        return $this->getInsideCount('shiny gold') - 1; // it counts the main bag
     }
 }
 

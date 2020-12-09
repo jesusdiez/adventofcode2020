@@ -61,4 +61,35 @@ EOF;
         $expected = ['bright white', 'muted yellow', 'light red', 'dark orange', ];
         self::assertEquals($expected, $this->sut->canContainDeep('shiny gold'));
     }
+
+    public function testPart1(): void
+    {
+        self::assertEquals(4, $this->sut->part1());
+    }
+
+    public function testGetInside(): void
+    {
+        self::assertEquals(8, $this->sut->getInsideCount('dark olive'));
+        self::assertEquals(1, $this->sut->getInsideCount('faded blue'));
+    }
+
+    public function testPart2Sample1(): void
+    {
+        self::assertEquals(32, $this->sut->part2());
+    }
+
+    public function testPart2Sample2(): void
+    {
+        $this->sut = new Day7(<<<EOF
+shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.
+EOF);
+
+        self::assertEquals(126, $this->sut->part2());
+    }
 }
