@@ -33,21 +33,28 @@ final class Day8 implements Day
         $pointer = 0;
         $executed = [];
         while(!in_array($pointer, $executed)) {
-            [$cmd, $arg] = $program[$pointer];
-            $executed[] = $pointer;
-            switch($cmd) {
-                case 'jmp':
-                    $pointer += $arg;
-                    break;
-                case 'acc':
-                    $acc += $arg;
-                case 'nop':
-                default:
-                    $pointer++;
-            }
+            [$pointer, $acc, $executed] = $this->execute($program, $pointer, $acc, $executed);
         }
 
         return $acc;
+    }
+
+    public function execute(array $program, int $pointer, int $acc, array $executed): array
+    {
+        [$cmd, $arg] = $program[$pointer];
+        $executed[] = $pointer;
+        switch($cmd) {
+            case 'jmp':
+                $pointer += $arg;
+                break;
+            case 'acc':
+                $acc += $arg;
+            case 'nop':
+            default:
+                $pointer++;
+        }
+
+        return [$pointer, $acc, $executed];
     }
 
     public function part1(): int
