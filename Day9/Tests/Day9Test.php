@@ -37,8 +37,13 @@ EOF;
         $this->sut = new Day9($this->input);
     }
 
+    public function testAnalyze(): void
+    {
+        self::assertEquals(127, $this->sut->analyze($this->input, 5));
+    }
+
     public function testPart1(): void
     {
-        self::assertEquals(127, $this->sut->part1());
+        self::assertEquals(-1, $this->sut->part1());
     }
 }

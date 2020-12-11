@@ -19,9 +19,25 @@ final class Day9 implements Day
         return explode(PHP_EOL, $contents);
     }
 
+    public function analyze(array $data, int $preambleSize): int
+    {
+        $count = count($data);
+        for ($i=$preambleSize; $i<$count; $i++) {
+            $preamble = \array_slice($data, $i-$preambleSize, $preambleSize);
+            $current = $data[$i];
+            $complementaryPreamble = array_map(fn($v) => -1*($v - $current), $preamble);
+            $complementaryIntersect = array_unique(array_values(array_intersect($preamble, $complementaryPreamble)));
+            if (count($complementaryIntersect) < 2) {
+                return (int) $current;
+            }
+        }
+        // All match
+        return -1;
+    }
+
     public function part1(): int
     {
-        return -1;
+        return $this->analyze($this->data, 25);
     }
 
     public function part2(): int
