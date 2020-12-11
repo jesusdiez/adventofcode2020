@@ -48,6 +48,12 @@ EOF;
         self::assertEquals($expected, Day8::parseInput($this->input));
     }
 
+    public function testExecute(): void
+    {
+        $program = Day8::parseInput($this->input);
+        self::assertEquals([1, 0, [0]], $this->sut->execute($program, 0, 0));
+    }
+
     public function testPart1(): void
     {
         self::assertEquals(5, $this->sut->part1());
@@ -55,6 +61,6 @@ EOF;
 
     public function testPart2(): void
     {
-//        self::assertEquals(?, $this->sut->part2());
+        self::assertEquals(8, $this->sut->part2());
     }
 }
