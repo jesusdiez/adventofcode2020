@@ -19,14 +19,28 @@ final class Day10 implements Day
         return array_map(fn($i) => (int) $i, array_filter(explode(PHP_EOL, $contents)));
     }
 
+    public function calculate(array $data): int
+    {
+        sort($data);
+        $count1 = $count3 = 0;
+
+        foreach ($data as $k => $v) {
+            $prev = ($k==0) ? 0 : $data[$k-1];
+            $rest = $v - $prev;
+            if ($rest == 1) {
+                $count1++;
+            } elseif ($rest == 3) {
+                $count3++;
+            }
+        }
+        $count3++;
+
+        return $count1 * $count3;
+    }
+
     public function part1(): int
     {
         return $this->calculate($this->data);
-    }
-
-    public function calculate(array $data): int
-    {
-        return -1;
     }
 
     public function part2(): int
