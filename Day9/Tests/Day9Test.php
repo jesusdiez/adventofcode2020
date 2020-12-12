@@ -37,13 +37,13 @@ EOF;
         $this->sut = new Day9($this->input);
     }
 
-    public function testAnalyze(): void
+    public function testFirstNotValid(): void
     {
-        self::assertEquals(127, $this->sut->analyze($this->input, 5));
+        self::assertEquals(127, $this->sut->firstNotValid(Day9::parseInput($this->input), 5));
     }
 
-    public function testPart1(): void
+    public function testEncryptionWeakness(): void
     {
-        self::assertEquals(-1, $this->sut->part1());
+        self::assertEquals(62, $this->sut->encryptionWeakness(Day9::parseInput($this->input), 5));
     }
 }
